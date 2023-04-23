@@ -1,0 +1,283 @@
+{
+	// See https://go.microsoft.com/fwlink/?LinkId=733558
+	// for the documentation about the tasks.json format
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Build UBT",
+			"detail": "Builds the Unreal Build Tool. Most other commands require this be built beforehand",
+			"type": "shell",
+			"command": "${workspaceFolder}/Engine/Build/BatchFiles/BuildUBT.bat",
+			"group": "build",
+			"presentation": {
+				"reveal": "always"
+			},
+			"problemMatcher": "$msCompile",
+			"promptOnClose": false
+		},
+		{
+			"label": "Build UAT",
+			"detail": "Builds the Unreal Automation Tool (which also builds UBT). Most other commands require this be built beforehand",
+			"type": "shell",
+			"command": "${workspaceFolder}/Engine/Build/BatchFiles/BuildUAT.bat",
+			"group": "build",
+			"presentation": {
+				"reveal": "always",
+				"showReuseMessage": false
+			},
+			"promptOnClose": false,
+			"problemMatcher": "$msCompile"
+		},
+		{
+			"label": "Regenerate compile_commands.json for the Unreal Editor",
+			"detail": "Regenerates compile_commands.json and the .rsp.gcd files used by clangd",
+			"type": "shell",
+			"command": "${workspaceFolder}/Engine/Binaries/DotNET/AutomationTool/UnrealBuildTool.exe",
+			"args": [
+				"-mode=GenerateClangDatabase",
+				"UnrealEditor",
+				"Development",
+				"Win64"
+			],
+			"group": "build",
+			"presentation": {
+				"reveal": "always",
+				"showReuseMessage": false
+			},
+			"promptOnClose": false,
+			"problemMatcher": "$msCompile",
+			"dependsOrder": "sequence",
+			"dependsOn": ["Build UAT"]
+		},
+		{
+			"label": "Regenerate compile_commands.json for Project",
+			"detail": "Regenerates compile_commands.json and the .rsp.gcd files used by clangd",
+			"type": "shell",
+			"command": "${workspaceFolder}/Engine/Binaries/DotNET/AutomationTool/UnrealBuildTool.exe",
+			"args": [
+				"-mode=GenerateClangDatabase",
+				"-Project=\"F:/ProjectName/ProjectName.uproject\"",
+				"-OutputDir=\"F:/ProjectName/\"",
+				"-Filter=\".../ProjectName/Source/...\"",
+				"ProjectNameEditor",
+				"Development",
+				"Win64"
+			],
+			"group": "build",
+			"presentation": {
+				"reveal": "always",
+				"showReuseMessage": false
+			},
+			"promptOnClose": false,
+			"problemMatcher": "$msCompile",
+			"dependsOrder": "sequence",
+			"dependsOn": ["Build UAT"]
+		},
+		{
+			"label": "Build Unreal Editor",
+			"detail": "Just builds the Unreal Editor without specifying a project",
+			"command": "${workspaceFolder}/Engine/Build/BatchFiles/Build.bat",
+			"args": [
+				"-Target=\"UnrealEditor Win64 Development\"",
+				"-Target=\"ShaderCompileWorker Win64 Development\"",
+				"-Quiet",
+				"-WaitMutex",
+				"-FromMsBuild"
+			],
+			"type": "shell",
+			"group": "build",
+			"presentation": {
+				"reveal": "always",
+				"showReuseMessage": false
+			},
+			"promptOnClose": false,
+			"problemMatcher": "$msCompile"
+		},
+		{
+			"label": "Launch Unreal Editor",
+			"detail": "Launch the Unreal Editor without a project",
+			"command": "${workspaceFolder}/Engine/Binaries/Win64/UnrealEditor.exe",
+			"type": "shell",
+			"group": "build",
+			"presentation": {
+				"reveal": "always",
+				"showReuseMessage": false
+			},
+			"promptOnClose": false,
+			"problemMatcher": "$msCompile"
+		},
+		{
+			"label": "Build Project",
+			"detail": "Actually builds the project's Editor target",
+			"command": "${workspaceFolder}/Engine/Build/BatchFiles/Build.bat",
+			"args": [
+				"-Project=\"F:/ProjectName/ProjectName.uproject\"",
+				"-Target=\"ProjectNameEditor Win64 Development\"",
+				"-Target=\"ShaderCompileWorker Win64 Development\"",
+				"-Quiet",
+				"-WaitMutex",
+				"-FromMsBuild"
+			],
+			"type": "shell",
+			"group": "build",
+			"presentation": {
+				"reveal": "always",
+				"showReuseMessage": false
+			},
+			"promptOnClose": false,
+			"problemMatcher": "$msCompile"
+		},
+		{
+			"label": "Launch Project",
+			"detail": "Launch the Unreal Editor for the provided project",
+			"command": "${workspaceFolder}/Engine/Binaries/Win64/UnrealEditor.exe",
+			"args": ["-Project=\"F:/ProjectName/ProjectName.uproject\""],
+			"type": "shell",
+			"group": "build",
+			"presentation": {
+				"reveal": "always",
+				"showReuseMessage": false
+			},
+			"promptOnClose": false,
+			"problemMatcher": "$msCompile"
+		},
+		{
+			"label": "Regenerate headers",
+			"detail": "Regenerate the .generated.h files in case you modify any headers",
+			"command": "${workspaceFolder}/Engine/Build/BatchFiles/Build.bat",
+			"args": [
+				"-Target=\"ProjectNameEditor Win64 Development\"",
+				"-Target=\"ShaderCompileWorker Win64 Development\"",
+				"-Project=\"F:/ProjectName/ProjectName.uproject\"",
+				"-SkipBuild"
+			],
+			"type": "shell",
+			"group": "build",
+			"presentation": {
+				"reveal": "always",
+				"showReuseMessage": false
+			},
+			"promptOnClose": false,
+			"problemMatcher": "$msCompile"
+		},
+		{
+			"label": "Generate project files",
+			"detail": "Generate the Visual Studio solution file in case you want to use it for debugging",
+			"command": "${workspaceFolder}/GenerateProjectFiles.bat",
+			"args": [
+				"ProjectName.uproject", // Just the project for this one target
+				"-Game",
+				"-NoIntellisense", // If we use VS, it will be just for debugging anyway
+				"-NoShippingConfigs",
+				"-CurrentPlatform", // Generates configurations for current platform only
+				"-NoDotNet" // Prevents the generation of UnrealBuildTool and other C# projects
+			],
+			"type": "shell",
+			"group": "build",
+			"presentation": {
+				"reveal": "always",
+				"showReuseMessage": false
+			},
+			"promptOnClose": false,
+			"problemMatcher": "$msCompile"
+		},
+		{
+			"label": "Full resync",
+			"detail": "Full update: Resyncs source control and builds everything",
+			"dependsOrder": "sequence",
+			"dependsOn": [
+				// "Resync source control",  // Commented out as it's not defined here
+				"Regenerate compile_commands.json for the Unreal Editor",
+				"Regenerate compile_commands.json for Project",
+				"Build Project",
+				"Launch Project"
+			],
+			"type": "shell",
+			"group": "build",
+			"presentation": {
+				"reveal": "always",
+				"showReuseMessage": false
+			},
+			"promptOnClose": false,
+			"problemMatcher": "$msCompile"
+		},
+		{
+			"label": "Fill derived data",
+			"detail": "Compile shaders, builds meshes and does all the required one-time setup for your project so the editor opens fast",
+			"command": "${workspaceFolder}/Engine/Binaries/Win64/UnrealEditor-Cmd.exe",
+			"args": [
+				"ProjectName",
+				"-run=DerivedDataCache",
+				"-targetplatform=WindowsEditor",
+				"-fill"
+			],
+			"type": "shell",
+			"group": "build",
+			"presentation": {
+				"reveal": "always",
+				"showReuseMessage": false
+			},
+			"promptOnClose": false,
+			"problemMatcher": "$msCompile"
+		},
+		{
+			"label": "Package project",
+			"detail": "Cooks and fully packages the project for target platform and configuration",
+			"command": "${workspaceFolder}/RunUAT.bat",
+			"args": [
+				"-ScriptsForProject=\"F:/ProjectName/ProjectName.uproject\"",
+				"BuildCookRun",
+				"-project=\"F:/ProjectName/ProjectName.uproject\"",
+				"-target=ProjectName",
+				"-platform=Win64",
+				"-clientconfig=Development",
+				"-utf8output",
+				"-nocompileeditor",
+				"-skipbuildeditor",
+				"-build",
+				"-cook",
+				"-stage",
+				"-pak",
+				"-archive",
+				"-archivedirectory=\"C:/Output/Directory\""
+			],
+			"dependsOrder": "sequence",
+			"dependsOn": ["Build UAT", "Build Project"],
+			"type": "shell",
+			"group": "build",
+			"presentation": {
+				"reveal": "always",
+				"showReuseMessage": false
+			},
+			"promptOnClose": false,
+			"problemMatcher": "$msCompile"
+		},
+		{
+			"label": "Cook content",
+			"detail": "Cook content for a target platform and configuration",
+			"command": "${workspaceFolder}/RunUAT.bat",
+			"args": [
+				"-ScriptsForProject=\"F:/ProjectName/ProjectName.uproject\"",
+				"BuildCookRun",
+				"-project=\"F:/ProjectName/ProjectName.uproject\"",
+				"-target=ProjectName",
+				"-platform=Win64",
+				"-clientconfig=Development",
+				"-utf8output",
+				"-nocompileeditor",
+				"-skipbuildeditor",
+				"-cook"
+			],
+			"dependsOrder": "sequence",
+			"dependsOn": ["Build UAT", "Build Project"],
+			"type": "shell",
+			"group": "build",
+			"presentation": {
+				"reveal": "always",
+				"showReuseMessage": false
+			},
+			"promptOnClose": false,
+			"problemMatcher": "$msCompile"
+		}
+	]
+}

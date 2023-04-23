@@ -1,0 +1,48 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "F:/MyProject/"
+		}
+	],
+	"settings": {
+		"editor.tabSize": 4,
+		"editor.insertSpaces": false,
+		"editor.glyphMargin": true,
+		"git.enabled": false,
+		"files.exclude": {
+			"**/.cache": true
+		},
+		"search.exclude": {
+			"**/Intermediate/*": true,
+			".vs/*": true,
+			".cache/*": true,
+			".vscode/*": true,
+			"**/*.dll": true,
+			"**/*.ilk": true,
+			"**/*.pdb": true,
+			"**/*.exe": true,
+			"**/*.uasset": true
+		},
+		"files.watcherExclude": {
+			"**/Intermediate/*": true,
+			".vs/*": true,
+			".cache/*": true,
+			".vscode/*": true,
+			"**/*.dll": true,
+			"**/*.ilk": true,
+			"**/*.pdb": true,
+			"**/*.exe": true,
+			"**/*.uasset": true
+		},
+		"clangd.arguments": [
+			"-j=16",
+			"--pch-storage=memory",
+			"--clang-tidy",
+			"--rename-file-limit=0",
+			"--background-index"
+		]
+	}
+}

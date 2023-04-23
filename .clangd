@@ -1,0 +1,6 @@
+CompileFlags:
+  Add: [-D__INTELLISENSE__, -ferror-limit=0]
+
+Diagnostics:
+  UnusedIncludes: Strict
+

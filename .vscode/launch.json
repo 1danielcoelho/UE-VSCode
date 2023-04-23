@@ -1,0 +1,17 @@
+{
+	"configurations": [
+		{
+			"name": "Build and debug",
+			"type": "cppvsdbg",
+			"request": "launch",
+			"cwd": "${workspaceRoot}",
+			"program": "${workspaceFolder}/Engine/Binaries/Win64/UnrealEditor.exe",
+			"args": ["-project=\"F:/ProjectName/ProjectName.uproject\""],
+			"internalConsoleOptions": "openOnSessionStart",
+			"visualizerFile": "${workspaceFolder}/Engine/Extras/VisualStudioDebugging/Unreal.natvis",
+			"console": "internalConsole",
+			"preLaunchTask": "Build Project"
+		}
+	],
+	"version": "2.0.0"
+}
